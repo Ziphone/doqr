@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.4] - 2020-08-08
+
+### Modified
+- Attempt to transfer symlinks to app layer content
+
 ## [0.3.3] - 2020-08-08
 
 ### Modified

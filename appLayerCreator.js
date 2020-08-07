@@ -67,8 +67,8 @@ function calculateHash(path) {
   });
 }
 
-function copySync(src, dest) {
-  const copyOptions = { overwrite: true, dereference: true };
+function copySync(src, dest, dereference) {
+  const copyOptions = { overwrite: true, dereference: dereference };
   fse.copySync(src, dest, copyOptions);
   chmodr.sync(dest, 0o777)
 }
@@ -98,7 +98,10 @@ async function addDataLayer(tmpdir, todir, options, config, layers, files, comme
   logger.info('Adding layer for ' + comment + ' ...');
   let buildDir = await fileutil.ensureEmptyDir(path.join(tmpdir, 'build'));
   files.map(f => {
-    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f));
+    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f), true);
+  });
+  files.map(f => {
+    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f), false);
   });
   let workdir = [options.workdir.substr(1)];
   let layerFile = path.join(todir, 'layer.tar.gz');
