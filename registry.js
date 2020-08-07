@@ -16,7 +16,6 @@ function request(options, callback) {
   });
 }
 
-
 function isOk(httpStatus) {
   return httpStatus >= 200 && httpStatus < 300;
 }
@@ -73,7 +72,6 @@ function dlToFile(uri, file, headers) {
   });  
 }
 
-
 function followRedirects(uri, headers, cb, count=0) {
   logger.debug('rc', uri);
   let options = URL.parse(uri);
@@ -87,8 +85,6 @@ function followRedirects(uri, headers, cb, count=0) {
     cb(null, res);
   }).end();
 }
-
-
 
 function buildHeaders(accept, auth) {
   let headers = { accept: accept };
@@ -140,8 +136,6 @@ function uploadContent(uploadUrl, file, fileConfig, auth) {
   });  
 }
 
-
-
 function Registry(registryBaseUrl, token) {
   const auth = 'Bearer ' + token;
 
@@ -176,8 +170,6 @@ function Registry(registryBaseUrl, token) {
       }).end();
     });
   }
-
-
 
   async function dlManifest(image) {
     return await dlJson(
@@ -284,7 +276,6 @@ function DockerRegistry(auth) {
     upload: upload
   };
 }
-
 
 module.exports = {
   Registry : Registry,

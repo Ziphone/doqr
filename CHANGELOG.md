@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.2] - 2020-08-07
+
+### Modified
+- Minor cleanup
+
 ## [0.3.1] - 2020-08-07
 
 ### Added

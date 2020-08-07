@@ -14,7 +14,6 @@ const tarExporter = require('./tarExporter');
 
 const logger = require('./logger');
 
-
 const possibleArgs = {
     '--fromImage <name:tag>'        : 'Required: Image name of base image - [path/]image:tag',
     '--toImage <name:tag>'          : 'Required: Image name of target image - [path/]image:tag',
@@ -44,7 +43,6 @@ const keys = Object.keys(possibleArgs)
 Object.keys(possibleArgs)
     .reduce((program, k) => program.option(k, possibleArgs[k]), program)
     .parse(process.argv);
-
 
 let options = {
     workdir : '/opt/app-root/src',
@@ -79,14 +77,11 @@ if (options.setTimeStamp) {
     }
     logger.info('Setting all dates to: ' + options.setTimeStamp);
 }
-
 if (options.layerOwner) {
     if (!options.layerOwner.match("^[0-9]+:[0-9]+$")) {
         exitWithErrorIf(true, 'layerOwner should be on format <number>:<number> (e.g. 1000:1000) but was: ' + options.layerOwner);
     }
 }
-
-
 if (options.registry) {
     options.fromRegistry = options.registry;
     options.toRegistry = options.registry;
@@ -148,4 +143,3 @@ run(options).then(() => {
     logger.error(error);
     process.exit(1);
 });
-

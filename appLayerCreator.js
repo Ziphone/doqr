@@ -9,11 +9,7 @@ const Gunzip = require('minizlib').Gunzip;
 const fileutil = require('./fileutil');
 const logger = require('./logger');
 
-const depLayerPossibles = ['package.json', 'package-lock.json', 'node_modules'];
-
 const ignore = ['.git', '.gitignore', '.npmrc', '.DS_Store', 'npm-debug.log', '.svn', '.hg', 'CVS']
-
-
 
 function statCache(layerOwner) {
   if (!layerOwner) return null;
@@ -48,7 +44,6 @@ function statCache(layerOwner) {
     }
   };
 }
-
 
 const tarDefaultConfig = {
   preservePaths: false,
@@ -133,7 +128,6 @@ async function addDataLayer(tmpdir, todir, options, config, layers, files, comme
   });
 }
 
-
 async function copyLayers(fromdir, todir, layers) {
   await Promise.all(layers.map(async layer => {
     let file = layer.digest.split(':')[1] + (layer.mediaType.includes('tar.gzip')  ? '.tar.gz' : '.tar');
@@ -179,6 +173,7 @@ async function addAppLayers(options, config, todir, manifest, tmpdir) {
     await addDataLayer(tmpdir, todir, options, config, manifest.layers, appFiles, 'app');
   }
 }
+
 async function addLabelsLayer(options, config, todir, manifest, tmpdir) {
   if (options.labels) {
     let labels = splitLabelsIntoObject(options.labels);

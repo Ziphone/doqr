@@ -2,7 +2,6 @@
 
 let debugEnabled = false;
 
-
 function timeString() {
   return (new Date()).toISOString();
 }

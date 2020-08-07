@@ -1,6 +1,5 @@
 const tar = require('tar');
 const fs = require('fs').promises;
-const fss = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
@@ -19,7 +18,6 @@ async function saveToTar(fromdir, tmpdir, toPath, repoTags, options) {
   let manifest = await fse.readJson(manifestFile);
   let configFile = path.join(fromdir, manifest.config.digest.split(':')[1] + '.json');
   let config = await fse.readJson(configFile);
-
 
   let tardir = path.join(tmpdir, 'totar'); 
   await fs.mkdir(tardir);
