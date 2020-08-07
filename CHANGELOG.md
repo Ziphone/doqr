@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 2020-08-07
+
+### Added
+- Added vercel/pkg
+
 ## [0.3.0] - 2020-08-07
 
 ### Added
