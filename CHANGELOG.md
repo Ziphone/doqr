@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.3] - 2020-08-08
+
+### Modified
+- Change file permissions in generated app layer
+- Minor cleanup
+
 ## [0.3.2] - 2020-08-07
 
 ### Modified

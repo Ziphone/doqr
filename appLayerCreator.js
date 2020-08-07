@@ -1,4 +1,5 @@
 const tar = require('tar');
+var chmodr = require('chmodr');
 const fs = require('fs').promises;
 const fse = require('fs-extra');
 const fss = require('fs');
@@ -69,6 +70,7 @@ function calculateHash(path) {
 function copySync(src, dest) {
   const copyOptions = { overwrite: true, dereference: true };
   fse.copySync(src, dest, copyOptions);
+  chmodr.sync(dest, 0o777)
 }
 
 function addEmptyLayer(config, options, operation, action) {

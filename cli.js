@@ -10,7 +10,6 @@ const Registry = require('./registry').Registry;
 const DockerRegistry = require('./registry').DockerRegistry;
 const appLayerCreator = require('./appLayerCreator');
 const fileutil = require('./fileutil');
-const tarExporter = require('./tarExporter');
 
 const logger = require('./logger');
 
@@ -22,7 +21,6 @@ const possibleArgs = {
     '--fromToken <token>'           : 'Optional: Authentication token for from registry',
     '--toRegistry <registry url>'   : 'Optional: URL of registry to push base image to - Default: https://registry-1.docker.io/v2/',
     '--toToken <token>'             : 'Optional: Authentication token for target registry',
-    '--toTar <path>'                : 'Optional: Export to tar file',
     '--registry <path>'             : 'Optional: Convenience argument for setting both from and to registry',
     '--token <path>'                : 'Optional: Convenience argument for setting token for both from and to registry',
     '--user <user>'                 : 'Optional: User account to run process in container - default: 1000',
@@ -124,9 +122,6 @@ async function run(options) {
 
     await appLayerCreator.addLayers(tmpdir, fromdir, todir, options);
 
-    if (options.toTar) {
-        await tarExporter.saveToTar(todir, tmpdir, options.toTar, options.toImage, options);
-    }
     if (options.toRegistry) {
         let toRegistry = new Registry(options.toRegistry, options.toToken);
         await toRegistry.upload(options.toImage, todir);

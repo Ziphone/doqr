@@ -1,6 +1,6 @@
 {
   "name": "doqr",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Build docker images without docker",
   "main": "./cli.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "Erlend Oftedal <erlend@oftedal.no>",
   "license": "Apache-2.0",
   "dependencies": {
+    "chmodr": "^1.2.0",
     "commander": "^2.20.3",
     "fs-extra": "^7.0.1",
     "pkg": "^4.4.9",
