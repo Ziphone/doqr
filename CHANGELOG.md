@@ -1,10 +1,17 @@
 # Changelog
 
+## [0.3.0] - 2020-08-07
+
+### Added
+- Support for setting image CMD
+
+### Modified
+- Merged app and dependency layers
+
 ## [0.2.0] - 2020-08-05
 
 ### Added
 - Support for setting the owner of the work folder (gid:uid)
-
 
 ## [0.1.0] - 2020-03-30
 

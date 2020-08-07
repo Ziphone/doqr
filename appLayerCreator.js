@@ -51,7 +51,7 @@ function statCache(layerOwner) {
 
 
 const tarDefaultConfig = {
-  preservePaths: false,  
+  preservePaths: false,
   follow: true
 };
 
@@ -101,7 +101,7 @@ async function addDataLayer(tmpdir, todir, options, config, layers, files, comme
   logger.info('Adding layer for ' + comment + ' ...');
   let buildDir = await fileutil.ensureEmptyDir(path.join(tmpdir, 'build'));
   files.map(f => {
-    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f));  
+    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f));
   });
   let workdir = [options.workdir.substr(1)];
   let layerFile = path.join(todir, 'layer.tar.gz');
@@ -109,8 +109,8 @@ async function addDataLayer(tmpdir, todir, options, config, layers, files, comme
   await tar.c(Object.assign({}, tarDefaultConfig, {
     statCache: statCache(options.layerOwner),
     portable: !options.layerOwner,
-    prefix: "/", 
-    cwd: buildDir, 
+    prefix: "/",
+    cwd: buildDir,
     file: layerFile,
     gzip: true,
     noMtime: (!options.setTimeStamp),
@@ -143,12 +143,12 @@ async function copyLayers(fromdir, todir, layers) {
 
 function parseCommandLineToParts(entrypoint) {
   return entrypoint.split('"')
-    .map((p,i) => {
-      if (i % 2 == 1) return [p];
-      return p.split(' ');
-    })
-    .reduce((a, b) => a.concat(b), [])
-    .filter(a => a != '');
+      .map((p,i) => {
+        if (i % 2 == 1) return [p];
+        return p.split(' ');
+      })
+      .reduce((a, b) => a.concat(b), [])
+      .filter(a => a != '');
 }
 
 function splitLabelsIntoObject(labelsString) {
@@ -165,17 +165,18 @@ async function addAppLayers(options, config, todir, manifest, tmpdir) {
     addEmptyLayer(config, options, `WORKDIR ${options.workdir}`, config => config.config.WorkingDir = options.workdir);
     let entrypoint = parseCommandLineToParts(options.entrypoint);
     addEmptyLayer(config, options, `ENTRYPOINT ${JSON.stringify(entrypoint)}`, config => config.config.Entrypoint = entrypoint);
+    if(options.command){
+      let command = parseCommandLineToParts(options.command);
+      addEmptyLayer(config, options, `CMD ${JSON.stringify(command)}`, config => config.config.Command = command);
+    }
     addEmptyLayer(config, options, `USER ${options.user}`, config => {
       config.config.user = options.user;
       config.container_config.user = options.user;
     });
     addLabelsLayer(options, config, todir, manifest, tmpdir)
     let appFiles = (await fs.readdir(options.folder)).filter(l => !ignore.includes(l));
-    let depLayerContent = appFiles.filter(l => depLayerPossibles.includes(l));
-    let appLayerContent = appFiles.filter(l => !depLayerPossibles.includes(l));
 
-    await addDataLayer(tmpdir, todir, options, config, manifest.layers, depLayerContent, 'dependencies');
-    await addDataLayer(tmpdir, todir, options, config, manifest.layers, appLayerContent, 'app');
+    await addDataLayer(tmpdir, todir, options, config, manifest.layers, appFiles, 'app');
   }
 }
 async function addLabelsLayer(options, config, todir, manifest, tmpdir) {
@@ -200,12 +201,12 @@ async function addLayers(tmpdir, fromdir, todir, options) {
 
   logger.info('Writing final image...');
   let configContent = Buffer.from(JSON.stringify(config));
-  let configHash = calculateHashOfBuffer(configContent); 
+  let configHash = calculateHashOfBuffer(configContent);
   let configFile = path.join(todir, configHash + '.json');
   await fs.writeFile(configFile, configContent);
   manifest.config.digest = 'sha256:' + configHash;
   manifest.config.size = await fileutil.sizeOf(configFile);
-  await fs.writeFile(path.join(todir, 'manifest.json'), JSON.stringify(manifest)); 
+  await fs.writeFile(path.join(todir, 'manifest.json'), JSON.stringify(manifest));
 }
 
 module.exports = {
