@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.1] - 2020-08-08
+
+### Modified
+- Reverted change of 0.4.0 - must find a more clever way
+
 ## [0.4.0] - 2020-08-08
 
 ### Modified

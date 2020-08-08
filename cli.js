@@ -118,11 +118,10 @@ async function run(options) {
     let todir = await fileutil.ensureEmptyDir(path.join(tmpdir, 'to'));
 
     let fromRegistry = options.fromRegistry ? new Registry(options.fromRegistry, options.fromToken) : new DockerRegistry(options.fromToken);
-    await fromRegistry.download(options.fromImage, fromdir, options.fromRegistry===options.toRegistry);
-
-    await appLayerCreator.addLayers(tmpdir, fromdir, todir, options);
-
     let toRegistry = new Registry(options.toRegistry, options.toToken);
+
+    await fromRegistry.download(options.fromImage, fromdir);
+    await appLayerCreator.addLayers(tmpdir, fromdir, todir, options);
     await toRegistry.upload(options.toImage, todir);
 
     logger.debug('Deleting ' + tmpdir + ' ...');
