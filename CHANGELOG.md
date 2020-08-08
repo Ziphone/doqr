@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.0] - 2020-08-08
+
+### Modified
+- Do not download base-image layers if src and dest registries are the same 
+
 ## [0.3.5] - 2020-08-08
 
 ### Modified

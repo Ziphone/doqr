@@ -230,7 +230,7 @@ function Registry(registryBaseUrl, token) {
   }
 
 
-  async function download(imageStr, folder) {
+  async function download(imageStr, folder, sameSrcDestRegistry) {
     let image = parseImage(imageStr);
 
     logger.info('Downloading manifest...');
@@ -241,8 +241,10 @@ function Registry(registryBaseUrl, token) {
     let config = await dlConfig(image, manifest.config);
     await fs.writeFile(path.join(folder, 'config.json'), JSON.stringify(config));
 
-    logger.info('Downloading layers...');
-    await Promise.all(manifest.layers.map(layer => dlLayer(image, layer, folder)));
+    if (!sameSrcDestRegistry){
+      logger.info('Downloading layers...');
+      await Promise.all(manifest.layers.map(layer => dlLayer(image, layer, folder)));
+    }
 
     logger.info('Image downloaded.');
   }

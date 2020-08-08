@@ -175,7 +175,7 @@ async function addLayers(tmpdir, fromdir, todir, options) {
   let config = await fse.readJson(path.join(fromdir, 'config.json'));
 
   logger.info('Adding new layers...');
-  await copyLayers(fromdir, todir, manifest.layers);
+  if(!(options.fromRegistry===options.toRegistry)) await copyLayers(fromdir, todir, manifest.layers);
   await addAppLayers(options, config, todir, manifest, tmpdir);
 
   logger.info('Writing final image...');
