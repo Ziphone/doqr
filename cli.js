@@ -45,7 +45,7 @@ Object.keys(possibleArgs)
 let options = {
     workdir : '/opt/app-root/src',
     user: '1001',
-    command: 'npm run start',
+    command: '',
     entrypoint: ''
 };
 
