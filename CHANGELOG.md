@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.5] - 2020-08-08
+
+### Modified
+- Modified app layer creation
+
 ## [0.3.4] - 2020-08-08
 
 ### Modified

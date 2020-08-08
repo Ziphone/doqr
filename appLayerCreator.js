@@ -1,5 +1,4 @@
 const tar = require('tar');
-var chmodr = require('chmodr');
 const fs = require('fs').promises;
 const fse = require('fs-extra');
 const fss = require('fs');
@@ -46,11 +45,6 @@ function statCache(layerOwner) {
   };
 }
 
-const tarDefaultConfig = {
-  preservePaths: false,
-  follow: true
-};
-
 function calculateHashOfBuffer(buf) {
   let hash = crypto.createHash('sha256');
   hash.update(buf);
@@ -65,12 +59,6 @@ function calculateHash(path) {
     stream.on('data', chunk => hash.update(chunk));
     stream.on('end', () => resolve(hash.digest('hex')));
   });
-}
-
-function copySync(src, dest, dereference) {
-  const copyOptions = { overwrite: true, dereference: dereference };
-  fse.copySync(src, dest, copyOptions);
-  chmodr.sync(dest, 0o777)
 }
 
 function addEmptyLayer(config, options, operation, action) {
@@ -96,26 +84,17 @@ async function getHashOfUncompressed(file) {
 
 async function addDataLayer(tmpdir, todir, options, config, layers, files, comment) {
   logger.info('Adding layer for ' + comment + ' ...');
-  let buildDir = await fileutil.ensureEmptyDir(path.join(tmpdir, 'build'));
-  files.map(f => {
-    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f), true);
-  });
-  files.map(f => {
-    copySync(path.join(options.folder, f), path.join(buildDir, options.workdir, f), false);
-  });
-  let workdir = [options.workdir.substr(1)];
   let layerFile = path.join(todir, 'layer.tar.gz');
   if (options.layerOwner) logger.info("Setting file ownership to: " + options.layerOwner)
-  await tar.c(Object.assign({}, tarDefaultConfig, {
+  await tar.c(Object.assign({},{
     statCache: statCache(options.layerOwner),
     portable: !options.layerOwner,
-    prefix: "/",
-    cwd: buildDir,
+    prefix: options.workdir,
     file: layerFile,
     gzip: true,
     noMtime: (!options.setTimeStamp),
     mtime: options.setTimeStamp
-  }), workdir);
+  }), [options.folder]);
   let fhash = await calculateHash(layerFile);
   let finalName = path.join(todir, fhash + '.tar.gz');
   await fse.move(layerFile, finalName);
