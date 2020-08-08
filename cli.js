@@ -6,12 +6,12 @@ const path = require('path');
 const fse = require('fs-extra');
 const fs = require('fs');
 
-const Registry = require('./registry').Registry;
-const DockerRegistry = require('./registry').DockerRegistry;
-const appLayerCreator = require('./appLayerCreator');
-const fileutil = require('./fileutil');
+const Registry = require('./image/registry').Registry;
+const DockerRegistry = require('./image/registry').DockerRegistry;
+const appLayerCreator = require('./image/appLayerCreator');
+const fileutil = require('./utils/fileutil');
 
-const logger = require('./logger');
+const logger = require('./utils/logger');
 
 const possibleArgs = {
     '--fromImage <name:tag>'        : 'Required: Image name of base image - [path/]image:tag',

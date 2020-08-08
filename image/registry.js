@@ -5,8 +5,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const fse = require('fs-extra');
 
-const fileutil = require('./fileutil');
-const logger = require('./logger');
+const fileutil = require('../utils/fileutil');
+const logger = require('../utils/logger');
 
 const redirectCodes = [307,303,302];
 

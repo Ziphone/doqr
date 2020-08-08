@@ -6,8 +6,8 @@ const path = require('path');
 const crypto = require('crypto');
 const Gunzip = require('minizlib').Gunzip;
 
-const fileutil = require('./fileutil');
-const logger = require('./logger');
+const fileutil = require('../utils/fileutil');
+const logger = require('../utils/logger');
 
 const ignore = ['.git', '.gitignore', '.npmrc', '.DS_Store', 'npm-debug.log', '.svn', '.hg', 'CVS']
 
