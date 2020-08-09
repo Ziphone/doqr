@@ -31,7 +31,6 @@ const possibleArgs = {
     '--setTimeStamp <timestamp>'    : 'Optional: Set a specific ISO 8601 timestamp on all entries (e.g. git commit hash). Default: 1970 in tar files, and now on manifest/config',
     '--verbose'                     : 'Verbose logging',
     '--allowInsecureRegistries'     : 'Allow insecure registries (with self-signed/untrusted cert)',
-    '--customContent <dirs/files>'  : 'Optional: Skip normal node_modules and applayer and include specified root folder files/directories instead',
     '--layerOwner <gid:uid>'        : 'Optional: Set specific gid and uid on files in the added layers',
 };
 
@@ -98,13 +97,6 @@ if(options.fromRegistry && options.fromRegistry.substr(-1) != '/') options.fromR
 
 if (!options.fromRegistry && !options.fromImage.split(':')[0].includes('/')) {
     options.fromImage = 'library/' + options.fromImage;
-}
-
-if (options.customContent) {
-    options.customContent = options.customContent.split(",");
-    options.customContent.forEach(p => {
-        exitWithErrorIf(!fs.existsSync(p), 'Could not find ' + p + ' in the root folder ')
-    });
 }
 
 async function run(options) {

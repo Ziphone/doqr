@@ -85,16 +85,18 @@ async function getHashOfUncompressed(file) {
 async function addDataLayer(tmpdir, todir, options, config, layers, files, comment) {
   logger.info('Adding layer for ' + comment + ' ...');
   let layerFile = path.join(todir, 'layer.tar.gz');
-  if (options.layerOwner) logger.info("Setting file ownership to: " + options.layerOwner)
+  if (options.layerOwner) logger.info("Setting file ownership to: " + options.layerOwner);
+  let contentFiles = fss.readdirSync(options.folder);
   await tar.c(Object.assign({},{
     statCache: statCache(options.layerOwner),
     portable: !options.layerOwner,
     prefix: options.workdir,
+    cwd: options.folder,
     file: layerFile,
     gzip: true,
     noMtime: (!options.setTimeStamp),
     mtime: options.setTimeStamp
-  }), [options.folder]);
+  }),contentFiles);
   let fhash = await calculateHash(layerFile);
   let finalName = path.join(todir, fhash + '.tar.gz');
   await fse.move(layerFile, finalName);
@@ -136,28 +138,23 @@ function splitLabelsIntoObject(labelsString) {
 }
 
 async function addAppLayers(options, config, todir, manifest, tmpdir) {
-  if (options.customContent) {
-    addLabelsLayer(options, config, todir, manifest, tmpdir)
-    await addDataLayer(tmpdir, todir, options, config, manifest.layers, options.customContent, 'custom');
-  } else {
-    addEmptyLayer(config, options, `WORKDIR ${options.workdir}`, config => config.config.WorkingDir = options.workdir);
-    if(options.entrypoint){
-      let entrypoint = parseCommandLineToParts(options.entrypoint);
-      addEmptyLayer(config, options, `ENTRYPOINT ${JSON.stringify(entrypoint)}`, config => config.config.Entrypoint = entrypoint);
-    }
-    if(options.cmd){
-      let command = parseCommandLineToParts(options.cmd);
-      addEmptyLayer(config, options, `CMD ${JSON.stringify(command)}`, config => config.config.Cmd = command);
-    }
-    addEmptyLayer(config, options, `USER ${options.user}`, config => {
-      config.config.user = options.user;
-      config.container_config.user = options.user;
-    });
-    addLabelsLayer(options, config, todir, manifest, tmpdir)
-    let appFiles = (await fs.readdir(options.folder)).filter(l => !ignore.includes(l));
-
-    await addDataLayer(tmpdir, todir, options, config, manifest.layers, appFiles, 'app');
+  addEmptyLayer(config, options, `WORKDIR ${options.workdir}`, config => config.config.WorkingDir = options.workdir);
+  if(options.entrypoint){
+    let entrypoint = parseCommandLineToParts(options.entrypoint);
+    addEmptyLayer(config, options, `ENTRYPOINT ${JSON.stringify(entrypoint)}`, config => config.config.Entrypoint = entrypoint);
   }
+  if(options.cmd){
+    let command = parseCommandLineToParts(options.cmd);
+    addEmptyLayer(config, options, `CMD ${JSON.stringify(command)}`, config => config.config.Cmd = command);
+  }
+  addEmptyLayer(config, options, `USER ${options.user}`, config => {
+    config.config.user = options.user;
+    config.container_config.user = options.user;
+  });
+  addLabelsLayer(options, config, todir, manifest, tmpdir)
+  let appFiles = (await fs.readdir(options.folder)).filter(l => !ignore.includes(l));
+
+  await addDataLayer(tmpdir, todir, options, config, manifest.layers, appFiles, 'app');
 }
 
 async function addLabelsLayer(options, config, todir, manifest, tmpdir) {

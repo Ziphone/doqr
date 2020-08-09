@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.2] - 2020-08-10
+
+### Modified
+- Improved scoping of folder flag
+
+### Removed
+- Custom content feature
+
 ## [0.4.1] - 2020-08-08
 
 ### Modified
