@@ -141,11 +141,13 @@ async function addAppLayers(options, config, todir, manifest, tmpdir) {
     await addDataLayer(tmpdir, todir, options, config, manifest.layers, options.customContent, 'custom');
   } else {
     addEmptyLayer(config, options, `WORKDIR ${options.workdir}`, config => config.config.WorkingDir = options.workdir);
-    let entrypoint = parseCommandLineToParts(options.entrypoint);
-    addEmptyLayer(config, options, `ENTRYPOINT ${JSON.stringify(entrypoint)}`, config => config.config.Entrypoint = entrypoint);
-    if(options.command){
-      let command = parseCommandLineToParts(options.command);
-      addEmptyLayer(config, options, `CMD ${JSON.stringify(command)}`, config => config.config.Command = command);
+    if(options.entrypoint){
+      let entrypoint = parseCommandLineToParts(options.entrypoint);
+      addEmptyLayer(config, options, `ENTRYPOINT ${JSON.stringify(entrypoint)}`, config => config.config.Entrypoint = entrypoint);
+    }
+    if(options.cmd){
+      let command = parseCommandLineToParts(options.cmd);
+      addEmptyLayer(config, options, `CMD ${JSON.stringify(command)}`, config => config.config.Cmd = command);
     }
     addEmptyLayer(config, options, `USER ${options.user}`, config => {
       config.config.user = options.user;

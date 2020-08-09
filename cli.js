@@ -44,9 +44,7 @@ Object.keys(possibleArgs)
 
 let options = {
     workdir : '/opt/app-root/src',
-    user: '1001',
-    command: '',
-    entrypoint: ''
+    user: '1001'
 };
 
 keys.map(k => options[k] = program[k] || options[k]);
