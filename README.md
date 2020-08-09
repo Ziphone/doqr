@@ -31,9 +31,10 @@ Options:
   --registry <path>              Optional: Convenience argument for setting both from and to registry
   --token <path>                 Optional: Convenience argument for setting token for both from and to registry
   --folder <full path>           Required: Base folder of node application (contains package.json)
-  --user <user>                  Optional: User account to run process in container - default: 1000
+  --user <user>                  Optional: User account to run process in container - default: 1001
   --workdir <directory>          Optional: Workdir where node app will be added and run from - default: /app
-  --entrypoint <entrypoint>      Optional: Entrypoint when starting container - default: npm start
+  --entrypoint <entrypoint>      Optional: Entrypoint when starting container - default: ''
+  --cmd <command>                Optional: CMD for docker image - default: ''
   --setTimeStamp <timestamp>     Optional: Set a specific ISO 8601 timestamp on all entries (e.g. git commit hash). Default: 1970 in tar files, and now on manifest/config
   --verbose                      Verbose logging
   --allowInsecureRegistries      Allow insecure registries (with self-signed/untrusted cert)
@@ -41,9 +42,3 @@ Options:
   --layerOwner   <gid:uid>       Optional: Set specific gid and uid on files in the added layers
   -h, --help                     output usage information
 ```
-
-## Detailed info
-Everything in the specified folder (`--folder`) is currently added to the image. It adds one layer with `package.json`, `package-lock.json` and `node_modules` and then a separate layer with the rest.
-
-You may want to prune dev-dependencies and remove any unwanted files before running `doqr`. 
-
