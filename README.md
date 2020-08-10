@@ -8,6 +8,11 @@ It will pull an image you specify from a given registry, add the node.js applica
 npm install -g doqr
 ```
 
+## How to make a Doqr binary
+```
+npm install; pkg cli.js
+```
+
 ## How to use
 
 This will pull the `node:13-slim` image from Docker hub, build the image by adding the application in `src/`, and push the result to the given registry, and set time timestamp of files in the created layers and configs to the current timestamp of the latest git commit.
